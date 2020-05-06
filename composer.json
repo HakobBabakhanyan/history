@@ -1,0 +1,27 @@
+{
+    "name": "hakobbabakhanyan/history",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hakob Babakhanyan",
+            "email": "hbabaxanyan@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "laravel/framework": ">=5.6"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "HakobBabakhanyan\\History\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "HakobBabakhanyan\\History\\Providers\\HistoryServiceProvider"
+            ]
+        }
+    }
+}
