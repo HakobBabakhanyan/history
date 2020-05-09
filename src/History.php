@@ -4,8 +4,6 @@
 namespace HakobBabakhanyan\History;
 
 
-use function foo\func;
-
 trait History
 {
 
@@ -13,9 +11,12 @@ trait History
     {
         parent::boot();
 
-        // todo deleted
         self::updating(function($model){
             @$model->history_save();
+        });
+
+        self::deleted(function ($model) {
+            @$model->historyClear();
         });
     }
 
@@ -42,8 +43,14 @@ trait History
         }
     }
 
+    protected function historyClear(){
+        if(!$this->exists) {
+            $this->histories()->delete();
+        }
+    }
+
     /**
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function histories(){
         return $this->morphMany(\HakobBabakhanyan\History\Models\History::class,'history');
