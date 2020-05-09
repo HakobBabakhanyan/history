@@ -8,6 +8,10 @@ class History extends Model
 {
     protected $table;
 
+    protected $casts = [
+        'created_at' => 'date:Y-m-d H:i:s'
+    ];
+
     protected $fillable = [
         'history_type',
         'history_id' ,

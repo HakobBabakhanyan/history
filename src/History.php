@@ -4,23 +4,27 @@
 namespace HakobBabakhanyan\History;
 
 
+use function foo\func;
+
 trait History
 {
 
-    /***
-     * @param  array  $options
-     *
-     * @return bool
-     */
-    public  function save(array $options = []){
+    public static function boot()
+    {
+        parent::boot();
 
-        @$this->history($options);
-
-        return parent::save($options);
+        // todo deleted
+        self::updating(function($model){
+            @$model->history_save();
+        });
     }
 
-    protected function history(array $options = []) {
-        if(isset($this->history_columns) && count($this->history_columns)) {
+    /**
+     *
+     */
+    protected function history_save() :void {
+
+        if($this->exists && isset($this->history_columns) && count($this->history_columns)) {
             $dirty = $this->getDirty();
             foreach ($this->history_columns as $column) {
                 if (isset($dirty[$column])) {
@@ -38,8 +42,24 @@ trait History
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function histories(){
         return $this->morphMany(\HakobBabakhanyan\History\Models\History::class,'history');
+    }
+
+    /**
+     * @param string $column
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function get_history_value(string $column, $data) {
+
+        $value  =  $this->histories()->where([['created_at','>', $data], ['column',$column]])->select('old_value')->limit(1)->first();
+
+        return $value ? $value->old_value : $this->$column;
     }
 
 }
